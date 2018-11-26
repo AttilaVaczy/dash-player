@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Docler Holding Test Video Player App</title>
+    <link rel="stylesheet" href="player.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
+        crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container">
+        <div class="player-container lp-video" id="player">
+            <video id="video" class="video" src="http://distribution.bbb3d.renderfarming.net/video/mp4/bbb_sunflower_1080p_30fps_normal.mp4"></video>
+            <div class="controls">
+                <div class="seekbar-container">
+                    <div class="seekbar"></div>
+                </div>
+                <div class="control-buttons">
+                    <button id="play-pause-button" class="play"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="./player.js"></script>
+    <script>
+        const mediaPlayer = new VideoPlayer('video');
+        const load = () => {
+            const play = document.getElementById('play-pause-button');
+            const seekbar = document.querySelector('.seekbar');
+
+            play.addEventListener("click", event => {
+                if (mediaPlayer.player.paused) {
+                    play.classList.replace('play', 'pause');
+                    mediaPlayer.player.play();
+                } else {
+                    play.classList.replace('pause', 'play');
+                    mediaPlayer.player.pause();
+                }
+            });
+
+            mediaPlayer.player.addEventListener("timeupdate", () => {
+                const seekbarPosition = mediaPlayer.player.currentTime / mediaPlayer.player.duration;
+                seekbar.style.width = seekbarPosition * 100 + "%";
+                if (mediaPlayer.player.ended) {
+                    play.classList.replace('play', 'pause');
+                }
+            });
+
+            //TODO needs to implement the drag and drop seekbar functionality
+
+            seekbar.addEventListener("mousedown", () => {
+                mediaPlayer.player.pause();
+            });
+
+            seekbar.addEventListener("mouseup", () => {
+                mediaPlayer.player.play();
+            });
+
+            window.addEventListener("keydown", event => {
+                if (event.keyCode === 32) {
+                    player.pause();
+                }
+            });
+
+        }
+        window.onload = load; 
+    </script>
+
+</body>
+
+</html>
